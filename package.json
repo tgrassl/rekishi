@@ -20,7 +20,6 @@
     "dependencies": {
         "clsx": "^1.2.1",
         "fast-average-color": "^9.2.0",
-        "fast-average-color-node": "^2.4.0",
         "fflate": "^0.7.4",
         "html-to-image": "^1.11.3",
         "solid-js": "^1.6.2"
