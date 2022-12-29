@@ -1,10 +1,10 @@
-import { render } from "solid-js/web";
-import "./index.css";
-import Newtab from "./Newtab";
+import { render } from 'solid-js/web';
+import './index.css';
+import History from './History';
 
-const appContainer = document.querySelector("#app-container");
+const appContainer = document.querySelector('#app-container');
 if (!appContainer) {
-  throw new Error("Can not find AppContainer");
+  throw new Error('Can not find AppContainer');
 }
 
-render(Newtab, appContainer);
+render(History, appContainer);
