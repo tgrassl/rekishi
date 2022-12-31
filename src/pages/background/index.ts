@@ -78,12 +78,13 @@ chrome.webNavigation.onCommitted.addListener(
 chrome.tabs.onRemoved.addListener(async (tabId) => {
   console.log('tab closed!', tabId);
   const previous = await getHistoryData();
-  const existingTabIndex = previous.findIndex((data) => data.tab === tabId);
+  const existingTabItems = previous.filter((data) => data.tab === tabId);
 
-  if (existingTabIndex !== -1) {
+  if (existingTabItems.length > 0) {
+    const lastItemInTabIndex = previous.indexOf(existingTabItems[existingTabItems.length - 1]);
     const newData = [...previous];
-    const item = newData[existingTabIndex];
-    newData[existingTabIndex] = { ...item, out: +new Date() };
+    const item = newData[lastItemInTabIndex];
+    newData[lastItemInTabIndex] = { ...item, out: +new Date() };
     await chrome.storage.local.set({ test: newData });
   }
 });

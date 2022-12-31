@@ -33,7 +33,8 @@ const manifest = defineManifest(async () => ({
       matches: ['*://*/*'],
     },
   ],
-  permissions: ['history', 'storage', 'webNavigation', 'favicon'],
+  permissions: ['history', 'storage', 'webNavigation', 'favicon', 'activeTab'],
+  host_permissions: ['https://*/*'],
 }));
 
 export default manifest;
