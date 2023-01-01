@@ -24,6 +24,7 @@
     position: relative;
     border-radius: 2px;
     width: 30px;
+    user-select: none;
   }
 }
 
@@ -48,6 +49,7 @@
 
   img {
     width: 25px;
+    user-select: none;
   }
 
   span {
@@ -69,6 +71,7 @@
   img {
     border-radius: 4px;
     display: block;
+    user-select: none;
   }
 }
 

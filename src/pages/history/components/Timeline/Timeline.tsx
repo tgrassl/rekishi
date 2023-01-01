@@ -3,12 +3,20 @@ import { colorShade } from '@src/utils/colors';
 import { FastAverageColor } from 'fast-average-color';
 import { createEffect, createResource, createSignal, For } from 'solid-js';
 import styles from './Timeline.module.scss';
+import { HistoryItem } from '@src/model/historyItem';
 
-const groupBy = (array, key) => {
+const groupBy = <T extends any[]>(array: T, key: string): { contents: T; key: number }[] => {
   return array.reduce((result, currentItem) => {
-    (result[currentItem[key]] = result[currentItem[key]] || []).push(currentItem);
+    const existingItem = result.find((resultItem) => resultItem[key] === currentItem[key]);
+
+    if (!existingItem) {
+      result.push({ key: currentItem[key], contents: [currentItem] });
+    } else {
+      existingItem.contents = [...existingItem.contents, currentItem];
+    }
+
     return result;
-  }, {}); // Empty object is the initial value for result object
+  }, []);
 };
 
 const fac = new FastAverageColor();
@@ -22,10 +30,10 @@ const getTimeText = (time: number) => {
 };
 
 function getFaviconUrl(url) {
-  return `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(url)}&size=32`;
+  return `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(url)}&size=64`;
 }
 
-const getHistoryData = async () => {
+const getHistoryData = async (): Promise<HistoryItem[]> => {
   // const data = await chrome.storage.local.get(["history"]);
   const data = await chrome.storage.local.get(['test']);
   return data?.test ?? [];
@@ -33,7 +41,7 @@ const getHistoryData = async () => {
 
 const fetchAndMapHistory = async () => {
   const data = await getHistoryData();
-  const dataWithColors = await Promise.all(
+  return await Promise.all(
     data.map(async (item) => {
       const iconUrl = getFaviconUrl(item.url);
       const colors = await fac.getColorAsync(iconUrl, { ignoredColor: [255, 255, 255, 255] });
@@ -41,62 +49,101 @@ const fetchAndMapHistory = async () => {
       return {
         ...item,
         icon: iconUrl,
-        colors: { isDark: colors.isDark, hex: brightIconColor ? colorShade('#ffffff', -50) : colors.hex, isLight: brightIconColor },
+        colors: {
+          isDark: colors.isDark,
+          hex: brightIconColor ? colorShade('#ffffff', -50) : colors.hex,
+          isLight: brightIconColor,
+        },
         duration: item.out ? (item.out - item.in) / 1000 : -1,
       };
     })
   );
-  console.log(dataWithColors);
-
-  const grouped = groupBy(dataWithColors, 'tab');
-
-  console.log(grouped);
-  return Object.values(grouped);
 };
 
 export const Timeline = () => {
   // const [history, setHistory] = createSignal([]);
-  const [tabs] = createResource<any[]>(fetchAndMapHistory);
+  const [tabs] = createResource<HistoryItem[]>(fetchAndMapHistory);
   const [elapsedTime, setElapsedTime] = createSignal(0);
+  const [groupedTabs, setGroupedTabs] = createSignal([]);
   let timelineRef: HTMLDivElement;
 
   createEffect(() => {
     if (!tabs.loading) {
+      const grouped = groupBy<HistoryItem[]>(tabs(), 'tab');
+      const groupedArray = Object.values(grouped);
+      const groupedArraySorted = groupedArray.sort((a, b) => (a.key > b.key ? -1 : 1));
+
+      console.log(groupedArraySorted);
+      setGroupedTabs(groupedArraySorted);
+
       const middle = window.innerWidth / 2;
       timelineRef.style.paddingRight = middle + 'px';
       timelineRef.style.paddingLeft = middle + 'px';
 
-      timelineRef.scrollLeft = timelineRef.scrollWidth;
-
       timelineRef.addEventListener('wheel', function () {
         const scrolledTime = timelineRef.scrollWidth - window.innerWidth - timelineRef.scrollLeft;
         setElapsedTime(scrolledTime);
-        console.log('scroll amount', scrolledTime);
-        // if (e.deltaY > 0) item.scrollLeft += 100;
-        // else item.scrollLeft -= 100;
       });
     }
   });
 
+  setTimeout(() => {
+    timelineRef.scrollLeft = timelineRef.scrollWidth;
+  }, 150);
+
+  let isDown = false;
+  let startX;
+  let scrollLeft;
+
+  const handleSeekDown = (e: MouseEvent) => {
+    isDown = true;
+    timelineRef.classList.add('active');
+    startX = e.pageX - timelineRef.offsetLeft;
+    scrollLeft = timelineRef.scrollLeft;
+  };
+
+  const handleSeekLeave = () => {
+    isDown = false;
+  };
+
+  const handleSeekUp = () => {
+    isDown = false;
+  };
+
+  const handleSeekMove = (e: MouseEvent) => {
+    if (!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - timelineRef.offsetLeft;
+    const deltaX = (x - startX) * 2;
+    timelineRef.scrollLeft = scrollLeft - deltaX;
+
+    const scrolledTime = timelineRef.scrollWidth - window.innerWidth - timelineRef.scrollLeft;
+    setElapsedTime(scrolledTime);
+  };
+
   return (
     <div class={styles.container}>
-      <div class={styles.timeline} ref={timelineRef}>
+      <div
+        class={styles.timeline}
+        ref={timelineRef}
+        onMouseDown={handleSeekDown}
+        onMouseLeave={handleSeekLeave}
+        onMouseUp={handleSeekUp}
+        onMouseMove={handleSeekMove}
+      >
         <div class={styles.seekArea}>
           <div class={styles.seekTime}>{getTimeText(elapsedTime())}</div>
           <div class={styles.seekbar} />
         </div>
         <span>{tabs.loading && 'Loading...'}</span>
         <div class={styles.tabs}>
-          <For each={tabs()}>
-            {(tab) => (
+          <For each={groupedTabs()}>
+            {({ contents: tab }) => (
               <div
                 class={styles.tab}
-                style={
-                  {
-                    // width: (tab[tab.length - 1].in - tab[0].in) / 1000 + 'px',
-                    // 'padding-left': (Date.now() - tab[0].in) / 1000 + 'px',
-                  }
-                }
+                style={{
+                  'padding-left': (tab[0].in - tabs()[0].in) / 1000 + 'px',
+                }}
               >
                 <For each={tab}>{(item) => <TimelineBar item={item} />}</For>
               </div>

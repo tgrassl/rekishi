@@ -8,7 +8,7 @@ export const TimelineBar = (props) => {
       <div
         style={{
           background: `linear-gradient(${props.item.colors?.hex}, ${colorShade(props.item.colors?.hex ?? '#333', -30)})`,
-          width: props.item.duration === -1 ? '200px' : props.item.duration + 'px',
+          width: (props.item.duration === -1 ? (Date.now() - props.item.in) / 1000 : props.item.duration) + 'px',
         }}
         class={styles.bar}
       >
