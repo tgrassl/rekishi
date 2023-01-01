@@ -15,7 +15,9 @@ const History = () => {
 
   return (
     <div class={styles.App}>
-      <button onClick={clear}>Clear History</button>
+      <div class={styles.header}>Rekishi</div>
+      {/*<button onClick={clear}>Clear History</button>*/}
+
       {!history.loading && <img class={styles.preview} src={lz.decompressFromUTF16(history()[history().length - 1].preview)} />}
       <Timeline history={history} />
     </div>

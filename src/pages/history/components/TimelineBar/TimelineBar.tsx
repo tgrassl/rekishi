@@ -12,7 +12,7 @@ export const TimelineBar = (props) => {
         }}
         class={styles.bar}
       >
-        <Show when={props.item.duration === -1 || props.item.duration >= 30} keyed>
+        <Show when={props.item.duration === -1 || props.item.duration > 30} keyed>
           <div
             class={styles.icon}
             style={{

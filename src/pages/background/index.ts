@@ -58,33 +58,36 @@ chrome.runtime.onMessage.addListener(async function (request, sender) {
   // sendResponse(image);
 });
 
-chrome.webNavigation.onCommitted.addListener(
-  async (data) => {
-    if (data.transitionType === 'auto_subframe') return;
+const handleNavigationUpdate = async (data) => {
+  if (data.transitionType === 'auto_subframe') return;
 
-    console.log('navigation about to occur!', data);
+  console.log('navigation about to occur!', data);
 
-    const previous = await getHistoryData();
+  const previous = await getHistoryData();
 
-    let newData = [...previous];
+  let newData = [...previous];
 
-    if (data.transitionType !== 'reload') {
-      const existingTabIndex = previous.findIndex((item) => item.tab === data.tabId && item.in < data.timeStamp);
+  if (data.transitionType !== 'reload') {
+    const existingTabItems = previous.filter((item) => item.tab === data.tabId);
 
-      if (existingTabIndex !== -1) {
-        const item = newData[existingTabIndex];
-        console.log('updating previous item in same tab', item);
-        newData[existingTabIndex] = { ...item, out: +new Date() };
-      }
+    if (existingTabItems.length > 0) {
+      const lastItemInTabIndex = previous.indexOf(existingTabItems[existingTabItems.length - 1]);
+      const item = newData[lastItemInTabIndex];
+      console.log('updating previous item in same tab', item);
+      newData[lastItemInTabIndex] = { ...item, out: +new Date() };
     }
+  }
 
-    const tabGroup = await chrome.tabs.get(data.tabId);
+  const tabGroup = await chrome.tabs.get(data.tabId);
 
-    newData = [...newData, { tab: data.tabId, in: data.timeStamp, url: data.url, group: tabGroup.groupId }];
-    await chrome.storage.local.set({ test: newData });
-  },
-  { url: [{ schemes: ['https'] }] }
-);
+  newData = [...newData, { tab: data.tabId, in: data.timeStamp, url: data.url, group: tabGroup.groupId }];
+  await chrome.storage.local.set({ test: newData });
+};
+
+// chrome.webNavigation.onHistoryStateUpdated.addListener(handleNavigationUpdate, { url: [{ schemes: ['https'] }] });
+chrome.webNavigation.onHistoryStateUpdated.addListener((data) => console.log('state updated!', data), { url: [{ schemes: ['https'] }] });
+
+chrome.webNavigation.onCommitted.addListener(handleNavigationUpdate, { url: [{ schemes: ['https'] }] });
 
 chrome.tabs.onRemoved.addListener(async (tabId) => {
   console.log('tab closed!', tabId);

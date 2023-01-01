@@ -54,14 +54,17 @@ export const Timeline = (props) => {
     timelineRef.classList.add('active');
     startX = e.pageX - timelineRef.offsetLeft;
     scrollLeft = timelineRef.scrollLeft;
+    timelineRef.style.cursor = 'grabbing';
   };
 
   const handleSeekLeave = () => {
     isDown = false;
+    timelineRef.style.cursor = 'grab';
   };
 
   const handleSeekUp = () => {
     isDown = false;
+    timelineRef.style.cursor = 'grab';
   };
 
   const handleSeekMove = (e: MouseEvent) => {

@@ -19,12 +19,12 @@
   top: 50%;
   box-shadow: #0000002d 0 2px 3px;
   background: white;
+  user-select: none;
 
   img {
     position: relative;
     border-radius: 2px;
     width: 30px;
-    user-select: none;
   }
 }
 
