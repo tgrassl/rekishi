@@ -1,4 +1,5 @@
 import { render } from 'solid-js/web';
+import { hashIntegration, Router } from '@solidjs/router';
 import './index.css';
 import History from './History';
 
@@ -7,4 +8,11 @@ if (!appContainer) {
   throw new Error('Can not find AppContainer');
 }
 
-render(History, appContainer);
+render(
+  () => (
+    <Router source={hashIntegration()}>
+      <History />
+    </Router>
+  ),
+  appContainer
+);

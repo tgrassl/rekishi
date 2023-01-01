@@ -5,8 +5,6 @@
 
 // const fac = new FastAverageColor();
 
-
-
 console.log(document.readyState);
 setTimeout(async () => {
   console.log(document.readyState, 'loaded! sending message...');
