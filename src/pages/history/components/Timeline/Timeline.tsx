@@ -3,6 +3,7 @@ import { createEffect, createSignal, For } from 'solid-js';
 import styles from './Timeline.module.scss';
 import { HistoryItem } from '@src/model/historyItem';
 import { groupBy } from '@src/utils/groupBy';
+import { useHistory } from '@pages/history/providers/HistoryProvider';
 
 const getTimeText = (time: number) => {
   if (Math.round(time) <= 0) return 'Now';
@@ -13,13 +14,15 @@ const getTimeText = (time: number) => {
 };
 
 export const Timeline = (props) => {
-  const [elapsedTime, setElapsedTime] = createSignal(0);
+  const { setActiveItem } = useHistory();
   const [groupedTabs, setGroupedTabs] = createSignal([]);
+  const [elapsedTime, setElapsedTime] = createSignal(0);
 
   let timelineRef: HTMLDivElement;
   let isDown = false;
   let startX;
   let scrollLeft;
+  const time = Date.now();
 
   createEffect(() => {
     if (!props.history.loading) {
@@ -32,6 +35,8 @@ export const Timeline = (props) => {
 
       const middle = window.innerWidth / 2;
       timelineRef.style.paddingRight = middle + 'px';
+
+      // @todo add difference between latest item and now
       timelineRef.style.paddingLeft = middle + 'px';
 
       timelineRef.addEventListener(
@@ -75,7 +80,17 @@ export const Timeline = (props) => {
     timelineRef.scrollLeft = scrollLeft - deltaX;
 
     const scrolledTime = timelineRef.scrollWidth - window.innerWidth - timelineRef.scrollLeft;
-    setElapsedTime(scrolledTime);
+    const elapsedTime = scrolledTime < 0 ? 0 : scrolledTime;
+    const activeItems = props.history().filter((item) => {
+      const checkIn = (time - item.in) / 1000 >= elapsedTime;
+      if (!item.out) {
+        return checkIn;
+      }
+      return checkIn && (time - item.out) / 1000 <= elapsedTime;
+    });
+
+    setActiveItem(activeItems[0]);
+    setElapsedTime(elapsedTime);
   };
 
   return (
