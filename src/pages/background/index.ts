@@ -1,3 +1,5 @@
+import * as lz from 'lz-string';
+
 console.log('background loaded');
 
 const getHistoryData = async () => {
@@ -27,18 +29,27 @@ chrome.runtime.onMessage.addListener(async function (request, sender) {
 
   switch (request.type) {
     case 'page': {
-      const previous = await getHistoryData();
-      let newData = [...previous, payload];
-      const existingUrlIndex = previous.findIndex((data) => data.url === url);
+      const screenshot = await chrome.tabs.captureVisibleTab({ format: 'jpeg', quality: 80 });
+      const compressed = lz.compressToUTF16(screenshot);
+      const payloadWithScreenshot = { ...payload, preview: compressed };
 
+      const previous = await getHistoryData();
+      let newData = [...previous, payloadWithScreenshot];
+
+      const existingUrlIndex = previous.findIndex((data) => data.url === url && !data.title);
       if (existingUrlIndex !== -1) {
         console.log('adding metadata to:', existingUrlIndex);
 
         newData = [...previous];
         const item = newData[existingUrlIndex];
 
-        newData[existingUrlIndex] = { ...item, ...payload };
+        const updatedItem = { ...item, ...payloadWithScreenshot };
+        console.log('prepared', updatedItem, { ...payloadWithScreenshot });
+
+        newData[existingUrlIndex] = updatedItem;
       }
+
+      console.log('storing', newData);
 
       await chrome.storage.local.set({ test: newData });
       break;
