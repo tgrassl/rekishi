@@ -4,8 +4,8 @@ import { FastAverageColor } from 'fast-average-color';
 
 const fac = new FastAverageColor();
 
-export const getFaviconUrl = (url) => {
-  return `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(url)}&size=64`;
+export const getFaviconUrl = (url, size = 64) => {
+  return `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(url)}&size=${size}`;
 };
 
 export const getHistoryData = async (): Promise<HistoryItem[]> => {

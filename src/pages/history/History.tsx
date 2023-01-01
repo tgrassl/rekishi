@@ -1,6 +1,6 @@
 import { Route, Routes } from '@solidjs/router';
 import '@src/styles/index.css';
-import styles from './History.module.css';
+import styles from './History.module.scss';
 import { HistoryProvider } from '@pages/history/providers/HistoryProvider';
 import { View } from '@pages/history/routes/View/View';
 import { Search } from '@pages/history/routes/Search/Search';
