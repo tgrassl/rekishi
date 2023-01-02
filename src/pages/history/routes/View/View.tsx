@@ -1,10 +1,10 @@
-import styles from '@pages/history/History.module.scss';
 import { Timeline } from '@pages/history/components/Timeline/Timeline';
 import { useHistory } from '@pages/history/providers/HistoryProvider';
-import * as lz from 'lz-string';
-import { createMemo } from 'solid-js';
 import { getFaviconUrl } from '@src/utils/history';
 import clsx from 'clsx';
+import * as lz from 'lz-string';
+import { createMemo } from 'solid-js';
+import styles from './View.module.scss';
 
 export const View = () => {
   const { history, activeItem } = useHistory();
