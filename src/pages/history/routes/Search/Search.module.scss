@@ -1,69 +1,8 @@
 .results {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 2rem;
     padding: 2rem;
     max-width: 1115px;
     margin: 0 auto;
-}
-
-.result {
-    background: #eeee;
-    border-radius: 8px;
-    padding: 1rem;
-    cursor: pointer;
-    display: grid;
-    gap: 1rem;
-
-    &Preview {
-        height: auto;
-        object-fit: cover;
-        object-position: top;
-        width: 100%;
-        border-radius: 8px;
-        background: white;
-
-        &.icon {
-            height: 200px;
-    
-            img {
-                width: 50px;
-                height: auto;
-                object-position: center;
-                position: relative;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                top: 50%;
-            }
-        }
-    }
-
-    &Footer {
-        gap: 8px;
-        display: flex;
-        align-items: center;
-    }
-
-    &Infos {
-        color: black;
-        font-size: 16px;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        justify-content: center;
-    }
-
-    &Title {
-        font-weight: bold;
-        max-width: 250px;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-    }
-
-    &Icon {
-        $iconWidth: 32px;
-        width: $iconWidth;
-        height: $iconWidth;
-    }
 }

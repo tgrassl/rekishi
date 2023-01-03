@@ -30,8 +30,8 @@ chrome.runtime.onMessage.addListener(async function (request, sender) {
   switch (request.type) {
     case 'page': {
       const screenshot = await chrome.tabs.captureVisibleTab({ format: 'jpeg', quality: 80 });
-      const compressed = lz.compressToUTF16(screenshot);
-      const payloadWithScreenshot = { ...payload, preview: compressed };
+      // const compressed = lz.compressToUTF16(screenshot);
+      const payloadWithScreenshot = { ...payload, preview: screenshot };
 
       const previous = await getHistoryData();
       let newData = [...previous, payloadWithScreenshot];

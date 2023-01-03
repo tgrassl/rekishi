@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 import HistoryItem = chrome.history.HistoryItem;
 
 export interface SearchResultProps {
-  item?: HistoryItem & { preview: string };
+  item?: HistoryItem & { preview?: string };
 }
 
 export const SearchResult = (props: SearchResultProps) => {

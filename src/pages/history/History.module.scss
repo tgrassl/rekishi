@@ -1,8 +1,14 @@
 .header {
-    font-size: 1rem;
+
     padding: 2rem;
-    font-family: monospace;
-    font-weight: 700;
     text-align: center;
     margin-bottom: 2.5rem;
+
+    .logo {
+        font-size: 1rem;
+        font-family: monospace;
+        font-weight: 700;
+        color: black;
+        text-decoration: none;
+    }
 }
