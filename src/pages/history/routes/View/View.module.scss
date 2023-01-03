@@ -1,13 +1,23 @@
+.search {
+    position: absolute;
+    z-index: 1000;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 40%;
+    box-shadow: 0 4px 30px #6c6c6c38;
+    backdrop-filter: blur(5px);
+}
+
 .preview {
     /*width: 100vw;*/
-    width: 90%;
+    width: 100%;
     height: auto;
     border-radius: 8px;
-    box-shadow: #0000002d 0 2px 3px;
+    //box-shadow: #0000002d 0 2px 3px;
     left: 50%;
     position: relative;
     transform: translateX(-50%);
-    max-height: 60vh;
+    max-height: 70vh;
     overflow: hidden;
 
     img {
