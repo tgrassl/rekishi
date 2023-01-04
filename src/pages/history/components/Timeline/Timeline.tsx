@@ -15,7 +15,6 @@ const getTimeText = (time: number) => {
 
 export const Timeline = (props) => {
   const { setActiveItem } = useHistory();
-  const [groupedTabs, setGroupedTabs] = createSignal([]);
   const [elapsedTime, setElapsedTime] = createSignal(0);
 
   let timelineRef: HTMLDivElement;
@@ -26,13 +25,6 @@ export const Timeline = (props) => {
 
   createEffect(() => {
     if (!props.history.loading) {
-      const grouped = groupBy<HistoryItem[]>(props.history(), 'tab');
-      const groupedArray = Object.values(grouped);
-      const groupedArraySorted = groupedArray.sort((a, b) => (a.key > b.key ? -1 : 1));
-
-      console.log(groupedArraySorted);
-      setGroupedTabs(groupedArraySorted);
-
       const middle = window.innerWidth / 2;
       timelineRef.style.paddingRight = middle + 'px';
 
@@ -108,21 +100,7 @@ export const Timeline = (props) => {
           <div class={styles.seekbar} />
         </div>
         <span>{props.history.loading && 'Loading...'}</span>
-        <div class={styles.tabs}>
-          <For each={groupedTabs()}>
-            {({ contents: tab }) => (
-              <div
-                class={styles.tab}
-                style={{
-                  'padding-left': (tab[0].in - props.history()[0].in) / 1000 + 'px',
-                }}
-              >
-                <For each={tab}>{(item) => <TimelineBar item={item} />}</For>
-              </div>
-            )}
-          </For>
-        </div>
-        {/*<For each={history()}>{(item) => <TimelineBar item={item} />}</For>*/}
+        <For each={props.history()}>{(item) => <TimelineBar item={item} />}</For>
       </div>
     </div>
   );

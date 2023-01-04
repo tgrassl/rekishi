@@ -1,8 +1,6 @@
 .header {
-
     padding: 2rem;
     text-align: center;
-    margin-bottom: 2.5rem;
 
     .logo {
         font-size: 1rem;
@@ -10,5 +8,6 @@
         font-weight: 700;
         color: black;
         text-decoration: none;
+        user-select: none;
     }
 }
