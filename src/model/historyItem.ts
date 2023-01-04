@@ -8,5 +8,6 @@ export interface HistoryItem {
   tab: number;
   title: string;
   url: string;
-  preview: any;
+  preview: string;
+  ref?: number;
 }
