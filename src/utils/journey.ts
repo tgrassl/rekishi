@@ -27,7 +27,7 @@ export const fetchAndMapJourney = async (): Promise<JourneyItem[]> => {
         return visit;
       } else {
         const iconUrl = getFaviconUrl(visit.url);
-        const colors = await fac.getColorAsync(iconUrl, { ignoredColor: [255, 255, 255] });
+        const colors = await fac.getColorAsync(iconUrl);
         const brightIconColor = colors.hex === '#ffffff';
         return {
           ...visit,
