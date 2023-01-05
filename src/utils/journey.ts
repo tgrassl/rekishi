@@ -1,6 +1,8 @@
-import { HistoryItem } from '@src/model/historyItem';
+import { JourneyItem } from '@src/model/journeyItem';
+import { PageVisit } from '@src/model/pageVisit';
 import { colorShade } from '@src/utils/colors';
 import { FastAverageColor } from 'fast-average-color';
+import dayjs from 'dayjs';
 
 const fac = new FastAverageColor();
 
@@ -8,33 +10,24 @@ export const getFaviconUrl = (url, size = 64) => {
   return `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(url)}&size=${size}`;
 };
 
-interface PageVisit {
-  tab: number;
-  url?: string;
-  icon?: string;
-  title?: string;
-  preview?: string;
-  in: number;
-  out?: number;
-  ref?: number;
-}
+export const getStorageKeyForDay = (day?: Date) => dayjs(day).format('DD_MM_YYYY');
 
-export const getHistoryData = async (): Promise<PageVisit[]> => {
-  // const data = await chrome.storage.local.get(["history"]);
-  const data = await chrome.storage.local.get(['test']);
-  return data?.test ?? [];
+export const getJourneyData = async (dayKey?: string): Promise<PageVisit[]> => {
+  const key = dayKey ?? getStorageKeyForDay();
+  const data = await chrome.storage.local.get([key]);
+  return data?.[key] ?? [];
 };
 
-export const fetchAndMapHistory = async (): Promise<HistoryItem[]> => {
-  const data = await getHistoryData();
+export const fetchAndMapJourney = async (): Promise<JourneyItem[]> => {
+  const data = await getJourneyData();
 
   const mappedItems = await Promise.all(
-    data.map(async (visit: PageVisit): Promise<HistoryItem | PageVisit> => {
+    data.map(async (visit: PageVisit): Promise<JourneyItem | PageVisit> => {
       if (Object.hasOwn(visit, 'ref')) {
         return visit;
       } else {
         const iconUrl = getFaviconUrl(visit.url);
-        const colors = await fac.getColorAsync(iconUrl, { ignoredColor: [255, 255, 255, 255] });
+        const colors = await fac.getColorAsync(iconUrl, { ignoredColor: [255, 255, 255] });
         const brightIconColor = colors.hex === '#ffffff';
         return {
           ...visit,
@@ -45,15 +38,15 @@ export const fetchAndMapHistory = async (): Promise<HistoryItem[]> => {
             isLight: brightIconColor,
           },
           duration: visit.out ? (visit.out - visit.in) / 1000 : -1,
-        } as HistoryItem;
+        } as JourneyItem;
       }
     })
   );
 
-  return mappedItems.map((visit: HistoryItem) => {
+  return mappedItems.map((visit: JourneyItem) => {
     if (!Object.hasOwn(visit, 'ref')) return visit;
 
-    const reference = mappedItems[visit.ref] as HistoryItem;
+    const reference = mappedItems[visit.ref] as JourneyItem;
     return {
       ...reference,
       in: visit.in,

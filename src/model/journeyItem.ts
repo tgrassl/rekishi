@@ -1,4 +1,4 @@
-export interface HistoryItem {
+export interface JourneyItem {
   colors: { isDark: boolean; hex: string; isLight: boolean };
   duration: number;
   group: number;

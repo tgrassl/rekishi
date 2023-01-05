@@ -1,4 +1,4 @@
-import { HistoryProvider } from '@pages/history/providers/HistoryProvider';
+import { JourneyProvider } from '@pages/history/providers/JourneyProvider';
 import { Search } from '@pages/history/routes/Search/Search';
 import { View } from '@pages/history/routes/View/View';
 import { Route, Routes, A } from '@solidjs/router';
@@ -7,11 +7,11 @@ import styles from './History.module.scss';
 
 const History = () => {
   const clear = async () => {
-    await chrome.storage.local.set({ test: [] });
+    await chrome.storage.local.clear();
   };
 
   return (
-    <HistoryProvider>
+    <JourneyProvider>
       <div class={styles.App}>
         <div class={styles.header}>
           <A href="/" class={styles.logo}>
@@ -24,7 +24,7 @@ const History = () => {
           <Route path="/search/:query" component={Search} />
         </Routes>
       </div>
-    </HistoryProvider>
+    </JourneyProvider>
   );
 };
 

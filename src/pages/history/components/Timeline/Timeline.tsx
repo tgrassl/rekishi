@@ -1,9 +1,9 @@
 import { TimelineBar } from '@pages/history/components/TimelineBar/TimelineBar';
 import { createEffect, createSignal, For } from 'solid-js';
 import styles from './Timeline.module.scss';
-import { HistoryItem } from '@src/model/historyItem';
+import { JourneyItem } from '@src/model/journeyItem';
 import { groupBy } from '@src/utils/groupBy';
-import { useHistory } from '@pages/history/providers/HistoryProvider';
+import { useJourney } from '@pages/history/providers/JourneyProvider';
 
 const getTimeText = (time: number) => {
   if (Math.round(time) <= 0) return 'Now';
@@ -14,7 +14,7 @@ const getTimeText = (time: number) => {
 };
 
 export const Timeline = (props) => {
-  const { setActiveItem } = useHistory();
+  const { setActiveItem } = useJourney();
   const [elapsedTime, setElapsedTime] = createSignal(0);
 
   let timelineRef: HTMLDivElement;
@@ -73,13 +73,27 @@ export const Timeline = (props) => {
 
     const scrolledTime = timelineRef.scrollWidth - window.innerWidth - timelineRef.scrollLeft;
     const elapsedTime = scrolledTime < 0 ? 0 : scrolledTime;
+    const gap = 24;
+    console.log(elapsedTime);
+    // const activeItems = props.history().filter((item) => {
+    //   const checkIn = (time - item.in) / 1000 >= elapsedTime - gap;
+    //   if (!item.out) {
+    //     return (time - item.in) / 1000 >= elapsedTime - gap;
+    //     // return checkIn;
+    //   }
+    //   return checkIn && (time - item.out) / 1000 <= elapsedTime - gap;
+    // });
+
     const activeItems = props.history().filter((item) => {
       const checkIn = (time - item.in) / 1000 >= elapsedTime;
       if (!item.out) {
-        return checkIn;
+        return (time - item.in) / 1000 >= elapsedTime;
+        // return checkIn;
       }
       return checkIn && (time - item.out) / 1000 <= elapsedTime;
     });
+
+    console.log(activeItems);
 
     setActiveItem(activeItems[0]);
     setElapsedTime(elapsedTime);

@@ -1,33 +1,33 @@
-interface PageVisit {
-  tab: number;
-  url?: string;
-  icon?: string;
-  title?: string;
-  preview?: string;
-  in: number;
-  out?: number;
-  ref?: number;
-}
+import { PageVisit } from '@src/model/pageVisit';
+import { getStorageKeyForDay } from '@src/utils/journey';
 
 let activeVisit: PageVisit = null;
-export let journey;
+export let journey = [];
 
 export const setJourney = (data: PageVisit[]) => {
   journey = data;
 };
 
-export const addPreviewToUrl = async ({ url }) => {
+export const addPreviewAndStore = async ({ url }) => {
   try {
-    const indexToUpdate = journey.findIndex((item) => item.url === url);
-    if (indexToUpdate > -1) {
-      const preview = await chrome.tabs.captureVisibleTab({ format: 'jpeg', quality: 80 });
-
-      const itemToUpdate = journey[indexToUpdate];
-      journey[indexToUpdate] = { ...itemToUpdate, preview };
-      console.log('added preview to ', url);
-    }
+    await addPreviewToUrl({ url });
+    const dayKey = getStorageKeyForDay();
+    await chrome.storage.local.set({ [dayKey]: journey });
   } catch (error) {
-    console.error('Preview error:', error);
+    setTimeout(async () => {
+      await addPreviewAndStore({ url });
+    }, 100);
+  }
+};
+
+export const addPreviewToUrl = async ({ url }) => {
+  const indexToUpdate = journey.findIndex((item) => item.url === url);
+  if (indexToUpdate > -1) {
+    const preview = await chrome.tabs.captureVisibleTab({ format: 'jpeg', quality: 80 });
+
+    const itemToUpdate = journey[indexToUpdate];
+    journey[indexToUpdate] = { ...itemToUpdate, preview };
+    console.log('added preview to ', url);
   }
 };
 

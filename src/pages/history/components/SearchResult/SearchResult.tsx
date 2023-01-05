@@ -1,6 +1,6 @@
 import styles from './SearchResult.module.scss';
 import clsx from 'clsx';
-import { getFaviconUrl } from '@src/utils/history';
+import { getFaviconUrl } from '@src/utils/journey';
 import dayjs from 'dayjs';
 import HistoryItem = chrome.history.HistoryItem;
 

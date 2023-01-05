@@ -5,21 +5,21 @@
 
 // const fac = new FastAverageColor();
 
-console.log(document.readyState);
-setTimeout(async () => {
-  console.log(document.readyState, 'loaded! sending message...');
-  await chrome.runtime.sendMessage({
-    type: 'page',
-    payload: {
-      url: window.location.href,
-      title: document.title,
-      // colors: {
-      //   isDark: colors.isDark,
-      //   hex: colors.hex,
-      // },
-    },
-  });
-}, 500);
+// console.log(document.readyState);
+// setTimeout(async () => {
+//   console.log(document.readyState, 'loaded! sending message...');
+//   await chrome.runtime.sendMessage({
+//     type: 'page',
+//     payload: {
+//       url: window.location.href,
+//       title: document.title,
+//       // colors: {
+//       //   isDark: colors.isDark,
+//       //   hex: colors.hex,
+//       // },
+//     },
+//   });
+// }, 500);
 
 // (async () => {
 // const colors = await fac.getColorAsync(
