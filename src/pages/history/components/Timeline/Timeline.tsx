@@ -1,51 +1,51 @@
 import { createWindowSize } from '@solid-primitives/resize-observer';
 import { TimelineBar } from '@pages/history/components/TimelineBar/TimelineBar';
 import { useJourney } from '@pages/history/providers/JourneyProvider';
-import { createEffect, createSignal, For } from 'solid-js';
+import { createEffect, createSignal, For, Show } from 'solid-js';
 
 import styles from './Timeline.module.scss';
 
 const getTimeText = (time: number) => {
   if (Math.round(time) <= 0) return 'Now';
-  else if (time < 60) return `${Math.round(time)} seconds ago`;
+  else if (time <= 60) return `${Math.round(time)} seconds ago`;
   else if (time > 60 && time < 3600) return `${Math.round(time / 60)} minutes ago`;
   else if (time > 3600) return `${Math.round(time / 3600)} hours ago`;
   return time;
 };
 
-export const Timeline = (props) => {
-  const { setActiveItem } = useJourney();
-  const [elapsedTime, setElapsedTime] = createSignal(0);
-  const size = createWindowSize();
-
+export const Timeline = () => {
   let timelineRef: HTMLDivElement;
   let isDown = false;
   let startX;
   let scrollLeft;
   const time = Date.now();
 
+  const { setActiveItem, journey } = useJourney();
+  const [elapsedTime, setElapsedTime] = createSignal(0);
+  const size = createWindowSize();
+
   createEffect(() => {
-    if (!props.history.loading) {
-      const middle = size.width / 2;
-      timelineRef.style.paddingRight = middle + 'px';
+    const middle = size.width / 2;
+    timelineRef.style.paddingRight = middle + 'px';
+    timelineRef.style.paddingLeft = middle + 'px';
 
-      // @todo add difference between latest item and now
-      timelineRef.style.paddingLeft = middle + 'px';
+    timelineRef.addEventListener(
+      'wheel',
+      function () {
+        const scrolledTime = timelineRef.scrollWidth - size.width - timelineRef.scrollLeft;
+        setElapsedTime(scrolledTime);
+      },
+      { passive: true }
+    );
 
-      timelineRef.addEventListener(
-        'wheel',
-        function () {
-          const scrolledTime = timelineRef.scrollWidth - size.width - timelineRef.scrollLeft;
-          setElapsedTime(scrolledTime);
-        },
-        { passive: true }
-      );
-    }
+    jumpForward();
   });
 
-  setTimeout(() => {
+  const jumpForward = () => {
     timelineRef.scrollLeft = timelineRef.scrollWidth;
-  }, 150);
+    setElapsedTime(0);
+    setActiveItem(journey()[journey().length - 1]);
+  };
 
   const handleSeekDown = (e: MouseEvent) => {
     isDown = true;
@@ -74,9 +74,9 @@ export const Timeline = (props) => {
 
     const scrolledTime = timelineRef.scrollWidth - size.width - timelineRef.scrollLeft;
     const elapsedTime = scrolledTime < 0 ? 0 : scrolledTime;
-    const gap = 24;
+    // const gap = 24;
     console.log(elapsedTime);
-    // const activeItems = props.history().filter((item) => {
+    // const activeItems = journey().filter((item) => {
     //   const checkIn = (time - item.in) / 1000 >= elapsedTime - gap;
     //   if (!item.out) {
     //     return (time - item.in) / 1000 >= elapsedTime - gap;
@@ -85,11 +85,10 @@ export const Timeline = (props) => {
     //   return checkIn && (time - item.out) / 1000 <= elapsedTime - gap;
     // });
 
-    const activeItems = props.history().filter((item) => {
+    const activeItems = journey().filter((item) => {
       const checkIn = (time - item.in) / 1000 >= elapsedTime;
       if (!item.out) {
-        return (time - item.in) / 1000 >= elapsedTime;
-        // return checkIn;
+        return checkIn;
       }
       return checkIn && (time - item.out) / 1000 <= elapsedTime;
     });
@@ -110,12 +109,25 @@ export const Timeline = (props) => {
         onMouseUp={handleSeekUp}
         onMouseMove={handleSeekMove}
       >
+        <Show when={elapsedTime() > size.width / 2}>
+          <button class={styles.jump} onClick={jumpForward}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="h-6 w-6"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+            </svg>
+          </button>
+        </Show>
         <div class={styles.seekArea}>
           <div class={styles.seekTime}>{getTimeText(elapsedTime())}</div>
           <div class={styles.seekbar} />
         </div>
-        <span>{props.history.loading && 'Loading...'}</span>
-        <For each={props.history()}>{(item) => <TimelineBar item={item} />}</For>
+        <For each={journey()}>{(item) => <TimelineBar item={item} />}</For>
       </div>
     </div>
   );

@@ -35,11 +35,13 @@ export const View = () => {
     <>
       <SearchBar class={styles.search} onAction={handleSearch} />
       {!journey.loading && (
-        <div class={clsx(styles.preview, !activeItem()?.preview && styles.icon)} style={{ 'border-color': activeItem()?.colors?.hex }}>
-          <img src={previewSrc()} />
-        </div>
+        <>
+          <div class={clsx(styles.preview, !activeItem()?.preview && styles.icon)} style={{ 'border-color': activeItem()?.colors?.hex }}>
+            <img src={previewSrc()} />
+          </div>
+          <Timeline />
+        </>
       )}
-      <Timeline history={journey} />
     </>
   );
 };
