@@ -3,6 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@babel/core': 7.*
   '@crxjs/vite-plugin': 2.0.0-beta.7
+  '@solid-primitives/resize-observer': ^2.0.7
   '@solidjs/router': ^0.6.0
   '@types/chrome': 0.0.203
   '@types/jest': ^29.2.3
@@ -41,6 +42,7 @@ specifiers:
   webpack: 5.*
 
 dependencies:
+  '@solid-primitives/resize-observer': 2.0.7_solid-js@1.6.2
   '@solidjs/router': 0.6.0_solid-js@1.6.2
   clsx: 1.2.1
   dayjs: 1.11.7
@@ -938,6 +940,43 @@ packages:
     dependencies:
       '@sinonjs/commons': 1.8.6
     dev: true
+
+  /@solid-primitives/event-listener/2.2.4_solid-js@1.6.2:
+    resolution: {integrity: sha512-O/ppM0SpXWtNC7AHv1bQA9Dy6pj3NUM06MhSV9xwVv4N06PmlNYhGLDSPT1Esesm6b0fDgCXB5V+AgCSEzQd/w==}
+    peerDependencies:
+      solid-js: ^1.6.0
+    dependencies:
+      '@solid-primitives/utils': 4.0.0_solid-js@1.6.2
+      solid-js: 1.6.2
+    dev: false
+
+  /@solid-primitives/resize-observer/2.0.7_solid-js@1.6.2:
+    resolution: {integrity: sha512-/RtCTs61ACdsCKJodNTgnKA05CI09dkg7usAb5jg14L6mzwTNWWdZbXtbYsUlD+kh1/1j+BKxp6VtkbpgJE5yQ==}
+    peerDependencies:
+      solid-js: ^1.6.0
+    dependencies:
+      '@solid-primitives/event-listener': 2.2.4_solid-js@1.6.2
+      '@solid-primitives/rootless': 1.2.1_solid-js@1.6.2
+      '@solid-primitives/utils': 4.0.0_solid-js@1.6.2
+      solid-js: 1.6.2
+    dev: false
+
+  /@solid-primitives/rootless/1.2.1_solid-js@1.6.2:
+    resolution: {integrity: sha512-8RpdyS1e58PQbDjgjpyCh+IGoX3QEs/2LauMfl94eXJ5d/o1y/c6P61z9XqQm+Bx1Otdgx4nbFCoF7HPqa0mwg==}
+    peerDependencies:
+      solid-js: ^1.6.0
+    dependencies:
+      '@solid-primitives/utils': 4.0.0_solid-js@1.6.2
+      solid-js: 1.6.2
+    dev: false
+
+  /@solid-primitives/utils/4.0.0_solid-js@1.6.2:
+    resolution: {integrity: sha512-fGsJy8Z8YiwogpiezD7TWjI62UCb0JAHJWdoXWGrggrn4bfToZotKkabiB0IVFMkWVE1ZcrkvZT3bkmqGnK0ng==}
+    peerDependencies:
+      solid-js: ^1.6.0
+    dependencies:
+      solid-js: 1.6.2
+    dev: false
 
   /@solidjs/router/0.6.0_solid-js@1.6.2:
     resolution: {integrity: sha512-7ug2fzXXhvvDBL4CQyMvMM9o3dgBE6PoRh38T8UTmMnYz4rcCfROqSZc9yq+YEC96qWt5OvJgZ1Uj/4EAQXlfA==}

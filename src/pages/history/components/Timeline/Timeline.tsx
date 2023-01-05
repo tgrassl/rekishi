@@ -1,9 +1,9 @@
+import { createWindowSize } from '@solid-primitives/resize-observer';
 import { TimelineBar } from '@pages/history/components/TimelineBar/TimelineBar';
-import { createEffect, createSignal, For } from 'solid-js';
-import styles from './Timeline.module.scss';
-import { JourneyItem } from '@src/model/journeyItem';
-import { groupBy } from '@src/utils/groupBy';
 import { useJourney } from '@pages/history/providers/JourneyProvider';
+import { createEffect, createSignal, For } from 'solid-js';
+
+import styles from './Timeline.module.scss';
 
 const getTimeText = (time: number) => {
   if (Math.round(time) <= 0) return 'Now';
@@ -16,6 +16,7 @@ const getTimeText = (time: number) => {
 export const Timeline = (props) => {
   const { setActiveItem } = useJourney();
   const [elapsedTime, setElapsedTime] = createSignal(0);
+  const size = createWindowSize();
 
   let timelineRef: HTMLDivElement;
   let isDown = false;
@@ -25,7 +26,7 @@ export const Timeline = (props) => {
 
   createEffect(() => {
     if (!props.history.loading) {
-      const middle = window.innerWidth / 2;
+      const middle = size.width / 2;
       timelineRef.style.paddingRight = middle + 'px';
 
       // @todo add difference between latest item and now
@@ -34,7 +35,7 @@ export const Timeline = (props) => {
       timelineRef.addEventListener(
         'wheel',
         function () {
-          const scrolledTime = timelineRef.scrollWidth - window.innerWidth - timelineRef.scrollLeft;
+          const scrolledTime = timelineRef.scrollWidth - size.width - timelineRef.scrollLeft;
           setElapsedTime(scrolledTime);
         },
         { passive: true }
@@ -71,7 +72,7 @@ export const Timeline = (props) => {
     const deltaX = (x - startX) * 2;
     timelineRef.scrollLeft = scrollLeft - deltaX;
 
-    const scrolledTime = timelineRef.scrollWidth - window.innerWidth - timelineRef.scrollLeft;
+    const scrolledTime = timelineRef.scrollWidth - size.width - timelineRef.scrollLeft;
     const elapsedTime = scrolledTime < 0 ? 0 : scrolledTime;
     const gap = 24;
     console.log(elapsedTime);

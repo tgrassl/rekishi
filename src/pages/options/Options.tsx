@@ -1,17 +1,26 @@
 import '@src/styles/index.css';
-import styles from './Options.module.css';
+import styles from './Options.module.scss';
+import { createResource } from 'solid-js';
+import { bytesToSize } from '@src/utils/bytesToSize';
 
 const Options = () => {
+  const [usedStorage] = createResource<number>(async () => chrome.storage.local.getBytesInUse());
+
+  const clear = async () => {
+    await chrome.storage.local.clear();
+  };
+
   return (
     <div class={styles.App}>
       <header class={styles.header}>
-        <p class="font-bold">
-          Edit <code>src/pages/options/Options.tsx</code> and save to reload.
-        </p>
-        <a class={styles.link} href="https://github.com/solidjs/solid" target="_blank" rel="noopener noreferrer">
-          Learn Solid
-        </a>
+        <span class={styles.logo}>rekishi.</span>
       </header>
+      <div class={styles.container}>
+        <div>
+          Used storage: <b>{bytesToSize(usedStorage())}</b>
+        </div>
+        <button onClick={clear}>Clear storage</button>
+      </div>
     </div>
   );
 };

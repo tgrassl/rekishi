@@ -1,0 +1,47 @@
+html, body {
+  font-family: monospace;
+  font-size: 16px;
+}
+
+.header {
+  padding: 2rem;
+  text-align: center;
+  margin-bottom: 1rem;
+
+  .logo {
+    font-size: 1rem;
+    font-family: monospace;
+    font-weight: 700;
+    color: black;
+    text-decoration: none;
+    user-select: none;
+  }
+}
+
+.container {
+  max-width: 450px;
+  margin: 0 auto;
+  //background: #eee;
+  padding: 1rem;
+  border-radius: 8px;
+  display: grid;
+  gap: 1rem;
+  font-family: monospace;
+  font-size: 1rem;
+}
+
+button {
+  background: transparent;
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  font-family: monospace;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background .1s ease-in;
+
+  &:hover {
+    background: #eee;
+  }
+}
