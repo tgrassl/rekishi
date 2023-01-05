@@ -3,7 +3,6 @@ import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import { render } from 'solid-js/web';
 import History from './History';
-import './index.css';
 
 dayjs.extend(localizedFormat);
 

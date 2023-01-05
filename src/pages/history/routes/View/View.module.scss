@@ -1,4 +1,5 @@
 .search {
+    width: 400px;
     position: absolute;
     z-index: 1000;
     left: 50%;
@@ -14,9 +15,7 @@
     height: auto;
     border-radius: 8px;
     //box-shadow: #0000002d 0 2px 3px;
-    left: 50%;
     position: relative;
-    transform: translateX(-50%);
     max-height: 85vh;
     overflow: hidden;
 

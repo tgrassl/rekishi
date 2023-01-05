@@ -1,8 +1,19 @@
+.container {
+    padding: 1rem 1rem 4rem 1rem
+}
+
 .results {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 2rem;
-    padding: 2rem;
     max-width: 1115px;
     margin: 0 auto;
+}
+
+.searchBar {
+    margin-bottom: 2rem;
+    max-width: 400px;
+    position: sticky;
+    top: 1rem;
+    z-index: 20;
 }
