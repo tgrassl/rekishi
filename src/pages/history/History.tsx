@@ -1,8 +1,8 @@
 import { JourneyProvider } from '@pages/history/providers/JourneyProvider';
 import { Search } from '@pages/history/routes/Search/Search';
 import { View } from '@pages/history/routes/View/View';
-import { Route, Routes, A } from '@solidjs/router';
-import '@src/styles/index.css';
+import '@shared/styles/index.css';
+import { A, Route, Routes } from '@solidjs/router';
 import styles from './History.module.scss';
 
 const History = () => {

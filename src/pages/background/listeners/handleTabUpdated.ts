@@ -1,4 +1,4 @@
-import { addPreviewToUrl, getActiveVisit, setActiveVisit } from './shared';
+import { addPreviewAndStore, getActiveVisit, setActiveVisit } from './shared';
 
 export const handleTabUpdated = async (tabId) => {
   const tab = await chrome.tabs.get(tabId);
@@ -9,7 +9,7 @@ export const handleTabUpdated = async (tabId) => {
   if (currentTab?.url !== url) {
     console.log(`tab url changed!`, currentTab?.url, '=>', url);
     setActiveVisit({ url, title, favIconUrl, tabId });
-    await addPreviewToUrl({ url });
+    await addPreviewAndStore({ url });
   } else {
     if (title !== currentTab.title) {
       console.log('tab title changed!', title);

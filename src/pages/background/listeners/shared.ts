@@ -1,5 +1,5 @@
-import { PageVisit } from '@src/model/pageVisit';
-import { getStorageKeyForDay } from '@src/utils/journey';
+import { PageVisit } from '@shared/model/pageVisit';
+import { getStorageKeyForDay } from '@shared/utils/journey';
 
 let activeVisit: PageVisit = null;
 export let journey = [];

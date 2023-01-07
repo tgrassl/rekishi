@@ -1,7 +1,7 @@
-import styles from './SearchResult.module.scss';
+import { getFaviconUrl } from '@shared/utils/journey';
 import clsx from 'clsx';
-import { getFaviconUrl } from '@src/utils/journey';
 import dayjs from 'dayjs';
+import styles from './SearchResult.module.scss';
 import HistoryItem = chrome.history.HistoryItem;
 
 export interface SearchResultProps {

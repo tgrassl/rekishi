@@ -1,5 +1,5 @@
-import '@src/styles/index.css';
-import { bytesToSize } from '@src/utils/bytesToSize';
+import '@shared/styles/index.css';
+import { bytesToSize } from '@shared/utils/bytesToSize';
 import { createResource } from 'solid-js';
 import styles from './Options.module.scss';
 

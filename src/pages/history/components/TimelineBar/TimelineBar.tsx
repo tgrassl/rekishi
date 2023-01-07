@@ -1,6 +1,6 @@
-import styles from './TimelineBar.module.scss';
+import { colorShade } from '@shared/utils/colors';
 import { Show } from 'solid-js';
-import { colorShade } from '@src/utils/colors';
+import styles from './TimelineBar.module.scss';
 
 export const TimelineBar = (props) => {
   return (

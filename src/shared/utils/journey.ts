@@ -1,8 +1,8 @@
-import { JourneyItem } from '@src/model/journeyItem';
-import { PageVisit } from '@src/model/pageVisit';
-import { colorShade } from '@src/utils/colors';
-import { FastAverageColor } from 'fast-average-color';
+import { JourneyItem } from '@shared/model/journeyItem';
+import { PageVisit } from '@shared/model/pageVisit';
+import { colorShade } from '@shared/utils/colors';
 import dayjs from 'dayjs';
+import { FastAverageColor } from 'fast-average-color';
 
 const fac = new FastAverageColor();
 

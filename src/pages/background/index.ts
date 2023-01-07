@@ -1,7 +1,7 @@
 import { registerListeners } from '@pages/background/listeners/register';
 
 import { setJourney } from '@pages/background/listeners/shared';
-import { getJourneyData } from '@src/utils/journey';
+import { getJourneyData } from '@shared/utils/journey';
 
 console.log('background loaded');
 
