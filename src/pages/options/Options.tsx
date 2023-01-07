@@ -1,13 +1,14 @@
 import '@src/styles/index.css';
-import styles from './Options.module.scss';
-import { createResource } from 'solid-js';
 import { bytesToSize } from '@src/utils/bytesToSize';
+import { createResource } from 'solid-js';
+import styles from './Options.module.scss';
 
 const Options = () => {
-  const [usedStorage] = createResource<number>(async () => chrome.storage.local.getBytesInUse());
+  const [usedStorage, { refetch }] = createResource<number>(async () => chrome.storage.local.getBytesInUse());
 
   const clear = async () => {
     await chrome.storage.local.clear();
+    await refetch();
   };
 
   return (

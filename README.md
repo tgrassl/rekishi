@@ -1,4 +1,4 @@
-# rekishi.
+![rekishi](./rekishi-browser.png)
 
 rekishi brings a [rewind.ai](https://www.rewind.ai/) like experience right to your browser!
 
