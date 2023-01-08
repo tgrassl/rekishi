@@ -32,14 +32,7 @@ export const Timeline = () => {
     timelineRef.style.paddingRight = middle + 'px';
     timelineRef.style.paddingLeft = middle + 'px';
 
-    timelineRef.addEventListener(
-      'wheel',
-      function () {
-        const scrolledTime = timelineRef.scrollWidth - size.width - timelineRef.scrollLeft;
-        setElapsedTime(scrolledTime);
-      },
-      { passive: true }
-    );
+    timelineRef.addEventListener('wheel', () => handleMove(timelineRef), { passive: true });
 
     jumpForward();
   });
