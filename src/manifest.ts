@@ -21,19 +21,13 @@ const manifest = defineManifest(async () => ({
   icons: {
     '128': 'icons/128x128.png',
   },
-  content_scripts: [
-    {
-      matches: ['http://*/*', 'https://*/*', '<all_urls>'],
-      js: ['src/pages/content/index.ts'],
-    },
-  ],
   web_accessible_resources: [
     {
       resources: ['assets/js/*.js', 'assets/css/*.css', 'assets/img/*'],
       matches: ['*://*/*'],
     },
   ],
-  permissions: ['history', 'storage', 'webNavigation', 'favicon', 'unlimitedStorage'],
+  permissions: ['history', 'storage', 'favicon', 'unlimitedStorage', 'sessions'],
   host_permissions: ['<all_urls>'],
 }));
 
