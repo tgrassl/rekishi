@@ -1,10 +1,7 @@
 import { JourneyItem } from '@shared/model/journeyItem';
 import { PageVisit } from '@shared/model/pageVisit';
-import { colorShade } from '@shared/utils/colors';
 import dayjs from 'dayjs';
-import { FastAverageColor } from 'fast-average-color';
-
-export const fac = new FastAverageColor();
+import { getColorsFromUrl } from '@shared/utils/getColorsFromUrl';
 
 export const getFaviconUrl = (url, size = 64) => {
   return `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(url)}&size=${size}`;
@@ -32,18 +29,13 @@ export const fetchAndMapJourney = async (): Promise<JourneyItem[]> => {
         return fixedVisit;
       } else {
         const iconUrl = getFaviconUrl(fixedVisit.url);
-        const colors = await fac.getColorAsync(iconUrl);
-        const brightIconColor = colors.hex === '#ffffff';
+        const colors = await getColorsFromUrl(iconUrl);
         return {
           ...fixedVisit,
           out,
           icon: iconUrl,
-          colors: {
-            isDark: colors.isDark,
-            hex: brightIconColor ? colorShade('#ffffff', -50) : colors.hex,
-            isLight: brightIconColor,
-          },
           duration: out ? (out - fixedVisit.in) / 1000 : -1,
+          colors,
         } as JourneyItem;
       }
     })

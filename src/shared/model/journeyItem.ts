@@ -1,5 +1,7 @@
+import { ColorInfo } from '@shared/utils/getColorsFromUrl';
+
 export interface JourneyItem {
-  colors: { isDark: boolean; hex: string; isLight: boolean };
+  colors: ColorInfo;
   duration: number;
   group: number;
   icon: string;
