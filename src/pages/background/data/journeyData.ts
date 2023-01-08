@@ -15,6 +15,9 @@ export const addPreviewAndStore = async ({ url }) => {
     await addPreviewToUrl({ url });
     const dayKey = getStorageKeyForDay();
     await chrome.storage.local.set({ [dayKey]: journey });
+    await chrome.runtime.sendMessage({
+      type: 'newItem',
+    });
   } catch (error) {
     setTimeout(async () => {
       await addPreviewAndStore({ url });
@@ -70,7 +73,6 @@ export const setActiveVisit = ({ url, title, favIconUrl, tabId }) => {
   }
 
   journey.push(activeVisit);
-  console.log({ journey });
 };
 
 export const getActiveVisit = () => {
