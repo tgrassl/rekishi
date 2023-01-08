@@ -4,7 +4,7 @@ import { colorShade } from '@shared/utils/colors';
 import dayjs from 'dayjs';
 import { FastAverageColor } from 'fast-average-color';
 
-const fac = new FastAverageColor();
+export const fac = new FastAverageColor();
 
 export const getFaviconUrl = (url, size = 64) => {
   return `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(url)}&size=${size}`;
@@ -22,22 +22,28 @@ export const fetchAndMapJourney = async (): Promise<JourneyItem[]> => {
   const data = await getJourneyData();
 
   const mappedItems = await Promise.all(
-    data.map(async (visit: PageVisit): Promise<JourneyItem | PageVisit> => {
-      if (Object.hasOwn(visit, 'ref')) {
-        return visit;
+    data.map(async (visit: PageVisit, index): Promise<JourneyItem | PageVisit> => {
+      // fix missing outs
+      const out = !visit.out && index !== data.length - 1 ? data[index + 1]?.in : visit.out;
+      const fixedVisit = { ...visit, out };
+
+      // handle refs in the next step
+      if (Object.hasOwn(fixedVisit, 'ref')) {
+        return fixedVisit;
       } else {
-        const iconUrl = getFaviconUrl(visit.url);
+        const iconUrl = getFaviconUrl(fixedVisit.url);
         const colors = await fac.getColorAsync(iconUrl);
         const brightIconColor = colors.hex === '#ffffff';
         return {
-          ...visit,
+          ...fixedVisit,
+          out,
           icon: iconUrl,
           colors: {
             isDark: colors.isDark,
             hex: brightIconColor ? colorShade('#ffffff', -50) : colors.hex,
             isLight: brightIconColor,
           },
-          duration: visit.out ? (visit.out - visit.in) / 1000 : -1,
+          duration: out ? (out - fixedVisit.in) / 1000 : -1,
         } as JourneyItem;
       }
     })
@@ -46,6 +52,7 @@ export const fetchAndMapJourney = async (): Promise<JourneyItem[]> => {
   return mappedItems.map((visit: JourneyItem) => {
     if (!Object.hasOwn(visit, 'ref')) return visit;
 
+    // map ref to existing item and add time slots
     const reference = mappedItems[visit.ref] as JourneyItem;
     return {
       ...reference,

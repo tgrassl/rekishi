@@ -21,6 +21,9 @@ const manifest = defineManifest(async () => ({
   icons: {
     '128': 'icons/128x128.png',
   },
+  action: {
+    default_title: 'Open history in rekishi.',
+  },
   web_accessible_resources: [
     {
       resources: ['assets/js/*.js', 'assets/css/*.css', 'assets/img/*'],

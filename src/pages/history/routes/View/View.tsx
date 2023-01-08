@@ -1,7 +1,7 @@
 import { SearchBar } from '@pages/history/components/SearchBar/SearchBar';
 import { Timeline } from '@pages/history/components/Timeline/Timeline';
 import { useJourney } from '@pages/history/providers/JourneyProvider';
-import { getFaviconUrl } from '@shared/utils/journey';
+import { getFaviconUrl } from '@shared/utils/getJourney';
 import { useNavigate } from '@solidjs/router';
 import clsx from 'clsx';
 import { createEffect, createMemo } from 'solid-js';

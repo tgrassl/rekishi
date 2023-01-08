@@ -1,5 +1,7 @@
 import { PageVisit } from '@shared/model/pageVisit';
-import { getStorageKeyForDay } from '@shared/utils/journey';
+import { getStorageKeyForDay } from '@shared/utils/getJourney';
+
+const currentDayKey = getStorageKeyForDay();
 
 let activeVisit: PageVisit = null;
 export let journey = [];
@@ -50,7 +52,6 @@ export const updatePreviousVisit = (tabId) => {
   }
 };
 
-// @todo: missing out on last stored item after extension reload
 export const setActiveVisit = ({ url, title, favIconUrl, tabId }) => {
   updatePreviousVisit(tabId);
 
@@ -61,6 +62,12 @@ export const setActiveVisit = ({ url, title, favIconUrl, tabId }) => {
     activeVisit = { ref: alreadyVisitedIndex, in: Date.now(), tab: tabId };
   } else {
     activeVisit = newActiveVisit;
+  }
+
+  const dayKey = getStorageKeyForDay();
+  if (currentDayKey !== dayKey) {
+    console.log('different day key!');
+    setJourney([]);
   }
 
   journey.push(activeVisit);

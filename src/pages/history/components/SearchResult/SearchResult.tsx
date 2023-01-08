@@ -1,4 +1,4 @@
-import { getFaviconUrl } from '@shared/utils/journey';
+import { getFaviconUrl } from '@shared/utils/getJourney';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
 import styles from './SearchResult.module.scss';

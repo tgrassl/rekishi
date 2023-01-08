@@ -1,5 +1,5 @@
 import { JourneyItem } from '@shared/model/journeyItem';
-import { fetchAndMapJourney } from '@shared/utils/journey';
+import { fetchAndMapJourney } from '@shared/utils/getJourney';
 import { Accessor, createContext, createResource, createSignal, Resource, Setter, useContext } from 'solid-js';
 
 export interface HistoryContextReturn {

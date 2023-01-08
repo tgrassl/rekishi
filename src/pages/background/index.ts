@@ -1,7 +1,8 @@
 import { registerListeners } from '@pages/background/listeners/register';
 
-import { setJourney } from '@pages/background/listeners/shared';
-import { getJourneyData } from '@shared/utils/journey';
+import { setJourney } from '@pages/background/shared';
+import { getJourneyData } from '@shared/utils/getJourney';
+import { openHistory } from '@pages/background/openHistory';
 
 console.log('background loaded');
 
@@ -11,12 +12,8 @@ console.log('background loaded');
   setJourney(data);
 })();
 
-chrome.runtime.onStartup.addListener(() => {
-  console.log('started up!');
-});
-
 chrome.runtime.onInstalled.addListener(() => {
-  console.log('installed!');
+  openHistory();
 });
 
 registerListeners();
