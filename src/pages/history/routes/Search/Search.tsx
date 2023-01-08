@@ -18,6 +18,7 @@ export const Search = () => {
     async (text) => chrome.history.search({ text })
   );
 
+  // @todo use ocr to search inside images
   const mappedBrowserResults = createMemo<chrome.history.HistoryItem[]>(() => mapBrowserSearchResult(journey, browserSearchResults, query));
 
   const handleSearch = (query: string) => {

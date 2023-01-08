@@ -6,8 +6,11 @@ body {
 }
 
 .header {
-    padding: 2rem;
+    padding: 0.75rem 1rem;
     text-align: center;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
 
     .logo {
         font-size: 1rem;
@@ -16,5 +19,28 @@ body {
         color: var(--text-color);
         text-decoration: none;
         user-select: none;
+    }
+
+    .options {
+        $size: 35px;
+        color: var(--text-color);
+        background: transparent;
+        padding: 4px;
+        border-radius: 50%;
+        border: none;
+        cursor: pointer;
+        transition: background .1s ease-in;
+        user-select: none;
+        width: $size;
+        height: $size;
+
+        &:hover {
+            background: var(--button-background);
+        }
+
+        svg {
+            width: 100%;
+            height: auto;
+        }
     }
 }

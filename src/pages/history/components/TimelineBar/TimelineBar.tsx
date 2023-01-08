@@ -5,7 +5,8 @@ import styles from './TimelineBar.module.scss';
 export const TimelineBar = (props) => {
   return (
     <>
-      <div
+      <a
+        href={props.item.url}
         style={{
           background: `linear-gradient(${props.item.colors?.hex}, ${colorShade(props.item.colors?.hex ?? '#333', -30)})`,
           width: (props.item.duration === -1 ? (Date.now() - props.item.in) / 1000 : props.item.duration) + 'px',
@@ -23,7 +24,7 @@ export const TimelineBar = (props) => {
             <img src={props.item.icon} alt={props.item.url} />
           </div>
         </Show>
-      </div>
+      </a>
     </>
   );
 };
