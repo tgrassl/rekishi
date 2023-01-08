@@ -3,12 +3,12 @@
   gap: 8px;
   justify-content: center;
   align-items: center;
-  background: rgb(241 241 241 / 80%);
+  background: var(--search-bar-background);
   margin-left: auto;
   margin-right: auto;
   padding: 1rem;
   border-radius: 8px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border-color);
   user-select: none;
 }
 

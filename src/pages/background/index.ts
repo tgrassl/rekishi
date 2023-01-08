@@ -1,10 +1,8 @@
 import { registerListeners } from '@pages/background/listeners/register';
 
-import { setJourney } from '@pages/background/shared';
+import { setJourney } from '@pages/background/data/journeyData';
 import { getJourneyData } from '@shared/utils/getJourney';
-import { openHistory } from '@pages/background/openHistory';
-
-console.log('background loaded');
+import { openHistory } from '@pages/background/utils/openHistory';
 
 (async () => {
   const data = await getJourneyData();

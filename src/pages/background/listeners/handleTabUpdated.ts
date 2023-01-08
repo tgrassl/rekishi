@@ -1,4 +1,4 @@
-import { addPreviewAndStore, getActiveVisit, setActiveVisit } from '../shared';
+import { addPreviewAndStore, getActiveVisit, setActiveVisit } from '../data/journeyData';
 
 export const handleTabUpdated = async (tabId) => {
   try {
@@ -8,8 +8,8 @@ export const handleTabUpdated = async (tabId) => {
     const { url, title, favIconUrl } = tab;
     const currentTab = getActiveVisit();
 
+    // tab url changed
     if (currentTab?.url !== url) {
-      console.log(`tab url changed!`, currentTab?.url, '=>', url);
       setActiveVisit({ url, title, favIconUrl, tabId });
       await addPreviewAndStore({ url });
     } else {

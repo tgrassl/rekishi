@@ -6,7 +6,7 @@
   border: none;
   padding: 0.5rem;
   border-radius: 50%;
-  box-shadow: #0000002d 0 2px 3px;
+  box-shadow: var(--shadow);
   z-index: 100000;
   display: flex;
   justify-content: center;

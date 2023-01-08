@@ -12,7 +12,7 @@ html, body {
     font-size: 1rem;
     font-family: monospace;
     font-weight: 700;
-    color: black;
+    color: var(--text-color);
     text-decoration: none;
     user-select: none;
   }
@@ -31,10 +31,11 @@ html, body {
 }
 
 button {
+  color: var(--text-color);
   background: transparent;
   padding: 0.5rem;
   border-radius: 4px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border-color);
   font-family: monospace;
   font-weight: bold;
   font-size: 1rem;
@@ -42,6 +43,6 @@ button {
   transition: background .1s ease-in;
 
   &:hover {
-    background: #eee;
+    background: var(--button-background);
   }
 }

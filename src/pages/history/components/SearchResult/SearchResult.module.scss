@@ -13,7 +13,7 @@ $borderRadius: 8px;
   transition: background .1s ease-in;
 
   &:hover {
-    background: #eeee;
+    background: var(--button-background);
   }
 }
 
@@ -23,7 +23,7 @@ $borderRadius: 8px;
   border-radius: $borderRadius;
   background: white;
   overflow: hidden;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border-color);
 
   img {
     width: 100%;
@@ -53,7 +53,7 @@ $borderRadius: 8px;
 }
 
 .infos {
-  color: black;
+  color: var(--text-color);
   font-size: 16px;
   display: flex;
   flex-direction: column;

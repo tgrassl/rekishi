@@ -1,4 +1,4 @@
-import { addPreviewAndStore, getActiveVisit, setActiveVisit } from '../shared';
+import { addPreviewAndStore, getActiveVisit, setActiveVisit } from '../data/journeyData';
 
 export const handleTabActivated = async (data) => {
   try {

@@ -1,0 +1,28 @@
+@import './theme';
+
+html {
+  background: var(--page-background);
+  color: var(--text-color);
+
+  &::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 8px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #9d9d9d;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}

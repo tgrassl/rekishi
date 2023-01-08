@@ -1,4 +1,4 @@
-import '@shared/styles/index.css';
+import '@shared/styles/index.scss';
 import { bytesToSize } from '@shared/utils/bytesToSize';
 import { createResource } from 'solid-js';
 import styles from './Options.module.scss';

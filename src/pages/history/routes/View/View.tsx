@@ -4,7 +4,7 @@ import { useJourney } from '@pages/history/providers/JourneyProvider';
 import { getFaviconUrl } from '@shared/utils/getJourney';
 import { useNavigate } from '@solidjs/router';
 import clsx from 'clsx';
-import { createEffect, createMemo } from 'solid-js';
+import { createMemo } from 'solid-js';
 import styles from './View.module.scss';
 
 export const View = () => {
@@ -13,7 +13,6 @@ export const View = () => {
 
   const handleSearch = (query: string) => {
     if (query === '' || query === ' ') return;
-
     navigate(`/search/${query}`);
   };
 
@@ -25,10 +24,6 @@ export const View = () => {
     }
 
     return getFaviconUrl(activeItem()?.url, 250);
-  });
-
-  createEffect(() => {
-    console.log('view data', journey());
   });
 
   return (

@@ -35,7 +35,7 @@
   width: 10px;
   height: 100%;
   background: white;
-  box-shadow: #0000002d 0 2px 3px;
+  box-shadow: var(--shadow);
   border-radius: 12px;
 
   background: rgba(255, 255, 255, 0.78);
@@ -55,7 +55,7 @@
   position: relative;
   text-align: center;
   background: rgba(255, 255, 255, 0.78);
-  box-shadow: #0000002d 0 2px 3px;
+  box-shadow: var(--shadow);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
   border: 1px solid rgba(255, 255, 255, 0.3);

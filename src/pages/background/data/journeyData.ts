@@ -4,7 +4,7 @@ import { getStorageKeyForDay } from '@shared/utils/getJourney';
 const currentDayKey = getStorageKeyForDay();
 
 let activeVisit: PageVisit = null;
-export let journey = [];
+let journey = [];
 
 export const setJourney = (data: PageVisit[]) => {
   journey = data;
@@ -29,7 +29,6 @@ export const addPreviewToUrl = async ({ url }) => {
 
     const itemToUpdate = journey[indexToUpdate];
     journey[indexToUpdate] = { ...itemToUpdate, preview };
-    console.log('added preview to ', url);
   }
 };
 
@@ -38,15 +37,15 @@ export const updatePreviousVisit = (tabId) => {
     if (activeVisit.tab === tabId) {
       const existingTabItems = journey.filter((item) => item.tab === tabId);
 
+      // update previous item in same tab
       if (existingTabItems.length > 0) {
         const lastItemInTabIndex = journey.indexOf(existingTabItems[existingTabItems.length - 1]);
         const item = journey[lastItemInTabIndex];
-        console.log('updating previous item in same tab', item);
         journey[lastItemInTabIndex] = { ...item, out: +new Date() };
       }
     } else {
+      // update previous item
       const item = journey[journey.length - 1];
-      console.log('setting out on previous item', item);
       journey[journey.length - 1] = { ...item, out: +new Date() };
     }
   }
@@ -59,6 +58,7 @@ export const setActiveVisit = ({ url, title, favIconUrl, tabId }) => {
   const alreadyVisitedIndex = journey.findIndex((item) => item.url === url);
 
   if (alreadyVisitedIndex > -1) {
+    // reference already visited item
     activeVisit = { ref: alreadyVisitedIndex, in: Date.now(), tab: tabId };
   } else {
     activeVisit = newActiveVisit;
@@ -66,7 +66,6 @@ export const setActiveVisit = ({ url, title, favIconUrl, tabId }) => {
 
   const dayKey = getStorageKeyForDay();
   if (currentDayKey !== dayKey) {
-    console.log('different day key!');
     setJourney([]);
   }
 
