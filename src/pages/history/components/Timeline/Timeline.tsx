@@ -2,8 +2,10 @@ import { createWindowSize } from '@solid-primitives/resize-observer';
 import { TimelineBar } from '@pages/history/components/TimelineBar/TimelineBar';
 import { useJourney } from '@pages/history/providers/JourneyProvider';
 import { createEffect, createSignal, For, Show } from 'solid-js';
-
+import { draggable as draggableDirective } from '@pages/history/directives/draggable';
 import styles from './Timeline.module.scss';
+
+const draggable = draggableDirective;
 
 const getTimeText = (time: number) => {
   if (Math.round(time) <= 0) return 'Now';
@@ -15,14 +17,15 @@ const getTimeText = (time: number) => {
 
 export const Timeline = () => {
   let timelineRef: HTMLDivElement;
-  let isDown = false;
-  let startX;
-  let scrollLeft;
   const time = Date.now();
+
+  console.log({ time });
 
   const { setActiveItem, journey } = useJourney();
   const [elapsedTime, setElapsedTime] = createSignal(0);
   const size = createWindowSize();
+
+  const reversed = [...journey()].reverse();
 
   createEffect(() => {
     const middle = size.width / 2;
@@ -47,50 +50,26 @@ export const Timeline = () => {
     setActiveItem(journey()[journey().length - 1]);
   };
 
-  const handleSeekDown = (e: MouseEvent) => {
-    isDown = true;
-    timelineRef.classList.add('active');
-    startX = e.pageX - timelineRef.offsetLeft;
-    scrollLeft = timelineRef.scrollLeft;
-    timelineRef.style.cursor = 'grabbing';
-  };
-
-  const handleSeekLeave = () => {
-    isDown = false;
-    timelineRef.style.cursor = 'grab';
-  };
-
-  const handleSeekUp = () => {
-    isDown = false;
-    timelineRef.style.cursor = 'grab';
-  };
-
-  const handleSeekMove = (e: MouseEvent) => {
-    if (!isDown) return;
-    e.preventDefault();
-    const x = e.pageX - timelineRef.offsetLeft;
-    const deltaX = (x - startX) * 2;
-    timelineRef.scrollLeft = scrollLeft - deltaX;
-
-    const scrolledTime = timelineRef.scrollWidth - size.width - timelineRef.scrollLeft;
+  const handleMove = (timeline: HTMLDivElement) => {
+    const scrolledTime = timeline.scrollWidth - size.width - timeline.scrollLeft;
     const elapsedTime = scrolledTime < 0 ? 0 : scrolledTime;
-    // const gap = 24;
+    const gap = 3;
     console.log(elapsedTime);
-    // const activeItems = journey().filter((item) => {
-    //   const checkIn = (time - item.in) / 1000 >= elapsedTime - gap;
-    //   if (!item.out) {
-    //     return (time - item.in) / 1000 >= elapsedTime - gap;
-    //     // return checkIn;
-    //   }
-    //   return checkIn && (time - item.out) / 1000 <= elapsedTime - gap;
-    // });
 
-    const activeItems = journey().filter((item) => {
-      const checkIn = (time - item.in) / 1000 >= elapsedTime;
+    const activeItems = reversed.filter((item, index) => {
+      const timeIn = (time - item.in) / 1000;
+
       if (!item.out) {
-        return checkIn;
+        return timeIn + gap >= elapsedTime;
       }
-      return checkIn && (time - item.out) / 1000 <= elapsedTime;
+
+      const timeOut = (time - item.out) / 1000;
+      const checkIn = timeIn + (index + 1) * gap >= elapsedTime;
+      const checkOut = timeOut + (index + 1) * gap <= elapsedTime;
+
+      console.log(index, timeIn + (index + 1) * gap, timeOut + (index + 1) * gap);
+
+      return checkIn && checkOut;
     });
 
     console.log(activeItems);
@@ -101,14 +80,7 @@ export const Timeline = () => {
 
   return (
     <div class={styles.container}>
-      <div
-        class={styles.timeline}
-        ref={timelineRef}
-        onMouseDown={handleSeekDown}
-        onMouseLeave={handleSeekLeave}
-        onMouseUp={handleSeekUp}
-        onMouseMove={handleSeekMove}
-      >
+      <div class={styles.timeline} ref={timelineRef} use:draggable={handleMove}>
         <Show when={elapsedTime() > size.width / 2}>
           <button class={styles.jump} onClick={jumpForward}>
             <svg

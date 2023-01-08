@@ -50,6 +50,7 @@ export const updatePreviousVisit = (tabId) => {
   }
 };
 
+// @todo: missing out on last stored item after extension reload
 export const setActiveVisit = ({ url, title, favIconUrl, tabId }) => {
   updatePreviousVisit(tabId);
 

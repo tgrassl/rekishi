@@ -7,6 +7,9 @@ const Options = () => {
   const [usedStorage, { refetch }] = createResource<number>(async () => chrome.storage.local.getBytesInUse());
 
   const clear = async () => {
+    await chrome.runtime.sendMessage({
+      type: 'clear',
+    });
     await chrome.storage.local.clear();
     await refetch();
   };
